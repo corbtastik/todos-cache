@@ -9,6 +9,9 @@ import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 
+/**
+ * @see <a href="https://redis.io/topics/data-types">Redis Types</a>
+ */
 @RedisHash("todos")
 @Data
 @Builder

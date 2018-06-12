@@ -3,6 +3,7 @@ package io.corbs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,10 +11,17 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.messaging.SubscribableChannel;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -45,7 +53,7 @@ public class TodosCacheApp implements CommandLineRunner {
         if(ObjectUtils.isEmpty(event.getTodo().getId())) {
             return;
         }
-        LOG.debug("caching todo " + event.getTodo().toString());
+        LOG.debug("caching todo " + event.getTodo());
         this.repo.save(event.getTodo());
     }
 
@@ -84,5 +92,4 @@ public class TodosCacheApp implements CommandLineRunner {
         SpringApplication.run(TodosCacheApp.class, args);
     }
 }
-
 
