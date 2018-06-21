@@ -21,5 +21,5 @@ class Todo implements Serializable {
     @Id
     private Integer id;
     private String title = "";
-    private Boolean completed = false;
+    private Boolean completed = Boolean.FALSE;
 }

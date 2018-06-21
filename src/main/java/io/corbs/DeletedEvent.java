@@ -5,15 +5,15 @@ import lombok.Data;
 
 @Data
 @Builder
-public class TodoDeletedEvent {
+class DeletedEvent {
     private Integer id;
-    public TodoDeletedEvent() {
+    DeletedEvent() {
         this.id = null;
     }
-    public TodoDeletedEvent(Integer id) {
+    DeletedEvent(Integer id) {
         this.id = id;
     }
-    public Integer getId() {
+    Integer getId() {
         return id;
     }
 }

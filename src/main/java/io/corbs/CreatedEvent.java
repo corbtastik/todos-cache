@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @NoArgsConstructor
-public class TodoCreatedEvent {
+class CreatedEvent {
     private Todo todo;
-    public TodoCreatedEvent(Todo todo) {
+    CreatedEvent(Todo todo) {
         this.todo = todo;
     }
 }
