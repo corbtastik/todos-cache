@@ -160,7 +160,7 @@ name            requested state   instances   memory   disk   urls
 todos-cache     started           1/1         1G       1G     todos-cache.cfapps.io
 ```
 
-### References
+### References  
 
 See this issue when deploying to cf
 https://github.com/spring-guides/gs-messaging-redis/issues/3
