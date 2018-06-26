@@ -1,0 +1,28 @@
+spring:
+    application:
+        name: todos-cache
+    cloud:
+        stream:
+            bindings:
+                todoCreatedEvent:
+                    destination: todoCreatedEvent
+                todoDeletedEvent:
+                    destination: todoDeletedEvent
+                todoUpdatedEvent:
+                    destination: todoUpdatedEvent
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: http://localhost:8761/eureka/
+logging:
+    level:
+        io:
+            corbs: DEBUG
+management:
+    endpoints:
+        web:
+            base-path: /ops
+            exposure:
+                include: '*'
+server:
+    port: 8002
