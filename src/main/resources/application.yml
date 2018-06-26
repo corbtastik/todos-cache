@@ -4,12 +4,14 @@ spring:
     cloud:
         stream:
             bindings:
-                todoCreatedEvent:
+                onCreatedEvent:
                     destination: todoCreatedEvent
-                todoDeletedEvent:
+                onDeletedEvent:
                     destination: todoDeletedEvent
-                todoUpdatedEvent:
+                onUpdatedEvent:
                     destination: todoUpdatedEvent
+                fireCreatedEvent:
+                    destination: todoCreatedEvent
 eureka:
     client:
         serviceUrl:

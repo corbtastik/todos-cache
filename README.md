@@ -141,7 +141,7 @@ srv-key-1: todos-cache
 srv-key-2: todos-messaging
 ```
 
-# cf push...awe yeah  
+#### cf push...awe yeah  
 
 Yes you can go from zero to hero with one command :)
 
@@ -159,6 +159,57 @@ OK
 name            requested state   instances   memory   disk   urls
 todos-cache     started           1/1         1G       1G     todos-cache.cfapps.io
 ```
+
+### Verify on Cloud  
+
+Once Todo(s) Cache is running, use an HTTP Client such as [cURL](https://curl.haxx.se/) or [HTTPie](https://httpie.org/) and call ``/ops/info`` to make sure the app has versioning.
+
+```bash
+> http todos-cache.cfapps.io/ops/info
+HTTP/1.1 200 OK
+Content-Type: application/vnd.spring-boot.actuator.v2+json;charset=UTF-8
+X-Vcap-Request-Id: e883347d-233e-4eed-6abd-b15c80cee2b1
+
+{
+    "build": {
+        "artifact": "todos-cache",
+        "group": "io.corbs",
+        "name": "todos-cache",
+        "time": "2018-06-26T05:39:45.932Z",
+        "version": "1.0.0.SNAP"
+    }
+}
+```
+
+#### Create a cloudy Todo
+
+```bash
+> http todos-cache.cfapps.io/todos/ title="make bacon pancakes"
+HTTP/1.1 201 Created
+Content-Type: application/json;charset=UTF-8
+Location: http://todos-cache.cfapps.io/todos/12
+X-Vcap-Request-Id: f9fb6214-6339-45f3-5041-e0993dbf3a6a
+
+{
+    "_links": {
+        "self": {
+            "href": "http://todos-cache.cfapps.io/todos/12"
+        },
+        "todo": {
+            "href": "http://todos-cache.cfapps.io/todos/12"
+        }
+    },
+    "completed": false,
+    "id": 12,
+    "title": "make bacon pancakes"
+}
+```  
+
+#### Event Listening  
+
+The Todo(s) Cache has several ``@StreamListener`` annotations on methods to bind Event(s) to method calls.  Only create, update and delete ops are ``@StreamListener(s)`` so anytime one of those Event(s) is raised Todo(s) cache will update itself.  
+
+To drive eventing clone, build and deploy [Todo(s) Command](https://github.com/corbtastik/todos-command) and have the [Todo(s) Cache](https://github.com/corbtastik/todos-data) running.  You can fire Event(s) from Todo(s) Command and Todo(s) Cache will react.
 
 ### References  
 

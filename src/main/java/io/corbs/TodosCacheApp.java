@@ -13,6 +13,8 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.messaging.SubscribableChannel;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
@@ -68,7 +70,7 @@ public class TodosCacheApp implements CommandLineRunner {
             this.repo.deleteAll();
         }
     }
-
+    
     @Override
     public void run(String... args) {
         Todo todo1 = Todo.builder().id(-1).title("todo test 1").build();
