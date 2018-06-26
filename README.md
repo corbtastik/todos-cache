@@ -209,7 +209,7 @@ X-Vcap-Request-Id: f9fb6214-6339-45f3-5041-e0993dbf3a6a
 
 The Todo(s) Cache has several ``@StreamListener`` annotations on methods to bind Event(s) to method calls.  Only create, update and delete ops are ``@StreamListener(s)`` so anytime one of those Event(s) is raised Todo(s) cache will update itself.  
 
-To drive eventing clone, build and deploy [Todo(s) Command](https://github.com/corbtastik/todos-command) and have the [Todo(s) Cache](https://github.com/corbtastik/todos-data) running.  You can fire Event(s) from Todo(s) Command and Todo(s) Cache will react.
+To drive eventing clone, build and deploy [Todo(s) Command](https://github.com/corbtastik/todos-command) and have the [Todo(s) Cache](https://github.com/corbtastik/todos-cache) running.  You can fire Event(s) from [Todo(s) Command](https://github.com/corbtastik/todos-command) and [Todo(s) Cache](https://github.com/corbtastik/todos-cache) will react.
 
 ### References  
 
