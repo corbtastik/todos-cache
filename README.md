@@ -35,7 +35,7 @@ Howdy and welcome...you can never have enough cache so to speak.  Inevitably you
 ### Run with Remote Debug
 
 ```bash
-java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=9111,suspend=n \
+> java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=9111,suspend=n \
   -jar target/todos-cache-1.0.0.SNAP.jar
 ```
 
