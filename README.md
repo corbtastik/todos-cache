@@ -88,6 +88,78 @@ Location: http://localhost:8002/todos/55
 }
 ```
 
+### Run on PAS
+
+[Pivotal Application Service](https://pivotal.io/platform/pivotal-application-service) is a modern runtime for Java, .NET, Node.js apps and many more, that provides a connected 5-star development to delivery experience.  PAS provides a cloud agnostic surface for delivering apps, apps such as Spring Boot Microservices.  Rarely in computing do we see this level of harmony between an application development framework and a platform.  Its supersonic dev to delivery with only Cloud Native principles as the interface :sunglasses:
+
+#### manifest.yml & vars.yml
+
+The only PAS specific artifacts in this code repo are ``manifest.yml`` and ``vars.yml``.  Modify ``vars.yml`` to add properties **specific to your PAS environment**. See [Variable Substitution](https://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html#multi-manifests) for more information.  The gist is we only need to set values for our PAS deployment in ``vars.yml`` and pass that file to ``cf push``.
+
+The Todo(s) Cache requires 2 environment variables:
+
+1. ``EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE`` - Service Discovery URL
+2. ``SPRING_CLOUD_CONFIG_URI`` - Spring Cloud Config Server URL
+
+and 2 services:
+
+1. todos-cache - Redis backing cache
+2. todos-messaging - RabbitMQ messaging backbone
+
+#### manifest.yml
+
+```yml
+---
+applications:
+- name: ((app.name))
+  memory: ((app.memory))
+  routes:
+  - route: ((app.route))
+  path: ((app.artifact))
+  buildpack: java_buildpack
+  env:
+    ((env-key-1)): ((env-val-1))
+    ((env-key-2)): ((env-val-2))
+  services:
+   - ((srv-key-1))
+   - ((srv-key-2))
+```  
+
+#### vars.yml
+
+```yml
+app:
+  name: todos-cache
+  artifact: target/todos-cache-1.0.0.SNAP.jar
+  memory: 1G
+  route: todos-cache.cfapps.io
+env-key-1: EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE
+env-val-1: http://cloud-index.cfapps.io/eureka/
+env-key-2: SPRING_CLOUD_CONFIG_URI
+env-val-2: http://config-srv.cfapps.io
+srv-key-1: todos-cache
+srv-key-2: todos-messaging
+```
+
+# cf push...awe yeah  
+
+Yes you can go from zero to hero with one command :)
+
+Make sure you're in the Todo(s) Cache project root (folder with ``manifest.yml``) and cf push...awe yeah!
+
+```bash
+> cf push --vars-file ./vars.yml
+```
+
+```bash
+> cf apps
+Getting apps in org bubbles / space dev as ...
+OK
+
+name            requested state   instances   memory   disk   urls
+todos-cache     started           1/1         1G       1G     todos-cache.cfapps.io
+```
+
 ### References
 
 See this issue when deploying to cf
