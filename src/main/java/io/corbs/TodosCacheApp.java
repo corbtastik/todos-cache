@@ -13,8 +13,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.messaging.SubscribableChannel;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
@@ -30,11 +29,11 @@ public class TodosCacheApp implements CommandLineRunner {
 
     interface SinkChannels {
         @Input
-        SubscribableChannel todoCreatedEvent();
+        SubscribableChannel onCreatedEvent();
         @Input
-        SubscribableChannel todoUpdatedEvent();
+        SubscribableChannel onUpdatedEvent();
         @Input
-        SubscribableChannel todoDeletedEvent();
+        SubscribableChannel onDeletedEvent();
     }
 
     @Autowired
@@ -42,7 +41,7 @@ public class TodosCacheApp implements CommandLineRunner {
         this.repo = repo;
     }
 
-    @StreamListener("todoCreatedEvent")
+    @StreamListener("onCreatedEvent")
     void onCreatedEvent(CreatedEvent event) {
         if(ObjectUtils.isEmpty(event.getTodo().getId())) {
             return;
@@ -51,16 +50,30 @@ public class TodosCacheApp implements CommandLineRunner {
         this.repo.save(event.getTodo());
     }
 
-    @StreamListener("todoUpdatedEvent")
+    @StreamListener("onUpdatedEvent")
     void onUpdatedEvent(UpdatedEvent event) {
-        if(ObjectUtils.isEmpty(event.getTodo().getId())) {
+        if(ObjectUtils.isEmpty(event)) {
             return;
         }
-        LOG.debug("updating todo " + event.getTodo().toString());
-        this.repo.save(event.getTodo());
+        //
+        Todo todo = event.getTodo();
+        if(todo == null) {
+            throw new IllegalArgumentException("todo cannot be null yo");
+        }
+        Todo sor = this.repo.findById(todo.getId())
+            .orElseThrow(() ->
+                new RuntimeException("cannot update a todo with that id: " + todo.getId()));
+        if(!ObjectUtils.isEmpty(todo.getCompleted())) {
+            sor.setCompleted(todo.getCompleted());
+        }
+        if(!StringUtils.isEmpty(todo.getTitle())){
+            sor.setTitle(todo.getTitle());
+        }
+        //
+        this.repo.save(sor);
     }
 
-    @StreamListener("todoDeletedEvent")
+    @StreamListener("onDeletedEvent")
     void onDeletedEvent(DeletedEvent event) {
         if(!ObjectUtils.isEmpty(event.getId())) {
             LOG.debug("removing todo " + event.getId());
@@ -70,7 +83,7 @@ public class TodosCacheApp implements CommandLineRunner {
             this.repo.deleteAll();
         }
     }
-    
+
     @Override
     public void run(String... args) {
         Todo todo1 = Todo.builder().id(-1).title("todo test 1").build();
