@@ -14,8 +14,8 @@ spring:
                     destination: createdEvent
 eureka:
     client:
-        serviceUrl:
-            defaultZone: http://localhost:8761/eureka/
+        service-url:
+          defaultZone: http://localhost:8761/eureka/
 logging:
     level:
         io:
