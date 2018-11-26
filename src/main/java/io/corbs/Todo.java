@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import java.io.Serializable;
 
@@ -19,6 +20,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 class Todo implements Serializable {
     @Id
+    @Indexed
     private Integer id;
     private String title = "";
     private Boolean completed = Boolean.FALSE;

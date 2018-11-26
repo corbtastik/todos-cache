@@ -93,6 +93,9 @@ public class TodosCacheApp implements CommandLineRunner {
         this.repo.save(todo1);
         this.repo.save(todo2);
         this.repo.save(todo3);
+        this.repo.delete(todo1);
+        this.repo.delete(todo2);
+        this.repo.delete(todo3);
     }
 
     public static void main(String[] args) {
